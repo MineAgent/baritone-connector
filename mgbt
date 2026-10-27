@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# mgbt - run Baritone commands on the running Minecraft client.
+#
+#   ./mgbt 'goal ~ ~ ~20'     walk to the coordinates (POST /bt/)
+#   ./mgbt 'mine iron_ore'    mine iron ore (POST /bt/)
+#   ./mgbt stop               stop the current Baritone task
+#   ./mgbt '#stop'            same, with the chat shorthand
+#   ./mgbt help               full manual (GET /bt/)
+#
+# Environment:
+#   MGBT_URL   default http://127.0.0.1:3420/bt
+set -euo pipefail
+
+URL="${MGBT_URL:-http://127.0.0.1:3420/bt}"
+
+usage() {
+	sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
+	exit "${1:-0}"
+}
+
+if [ $# -eq 0 ]; then
+	usage 1
+fi
+
+case "$1" in
+	-h | --help | help)
+		exec curl -sS "$URL/"
+		;;
+	*)
+		# Keep quoting intact: the caller must quote commands containing ~, otherwise bash
+		# expands ~ to $HOME before this script sees it.
+		curl -sS -X POST --data-binary "$*" "$URL/"
+		;;
+esac

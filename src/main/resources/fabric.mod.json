@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "mgbaritoneconnector",
+	"version": "${version}",
+	"name": "MGBaritoneConnector",
+	"description": "Baritone control mounted at 127.0.0.1:3420/bt by MGHttpdProvider. POST a Baritone command and it runs directly through Baritone's API without a chat packet; GET /bt/ returns the manual. Baritone and MGHttpdProvider are both required. Split out of mcctl.",
+	"authors": [
+		"MineAgent"
+	],
+	"license": "LGPL-3.0-only",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.example.mgbc.MGBaritoneConnectorMod"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"httpdprovider": ">=1.0",
+		"baritone": ">=1.19.0"
+	},
+	"contact": {
+		"homepage": "https://github.com/MineAgent/baritone-connector",
+		"sources": "https://github.com/MineAgent/baritone-connector"
+	}
+}
