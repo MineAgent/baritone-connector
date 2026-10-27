@@ -14,7 +14,7 @@ set -euo pipefail
 URL="${MGBT_URL:-http://127.0.0.1:3420/bt}"
 
 usage() {
-	sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
+	sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'
 	exit "${1:-0}"
 }
 
