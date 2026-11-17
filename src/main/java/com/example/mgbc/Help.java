@@ -12,10 +12,10 @@ public final class Help {
 
 	public static String text() {
 		return """
-				MGBaritoneConnector — Baritone 控制 (Fabric, Minecraft 26.2)
+				MGBaritoneConnector — Baritone 控制 (Fabric, Minecraft 26.3)
 				============================================================
 				挂载地址: http://127.0.0.1:3420/bt
-				必需模组: MGHttpdProvider + Baritone 1.19.0+
+				必需模组: MGHttpdProvider 1.2.1+, Baritone 1.20.0+
 				本模组把命令直接交给 Baritone API, 不经过聊天框。
 
 				  GET  /bt/   返回本使用说明

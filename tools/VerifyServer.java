@@ -21,11 +21,16 @@ import java.util.List;
  * executor, checks the HTTP contract, and exits with 0 on success.</p>
  *
  * <pre>
- * javac --release 25 -encoding UTF-8 -d build/verify -cp libs/httpdprovider-1.0.jar \
+ * LOG4J_API=~/.minecraft/libraries/org/apache/logging/log4j/log4j-api/2.26.0/log4j-api-2.26.0.jar
+ * javac --release 25 -encoding UTF-8 -d build/verify -cp libs/httpdprovider-1.2.1.jar \
  *   src/main/java/com/example/mgbc/{BaritoneCommandExecutor,BaritoneEndpoint,Help}.java \
  *   tools/VerifyServer.java
- * java -cp build/verify:libs/httpdprovider-1.0.jar VerifyServer
+ * java -cp build/verify:libs/httpdprovider-1.2.1.jar:$LOG4J_API VerifyServer
  * </pre>
+ *
+ * <p>MGHttpdProvider 1.2.1 logs through the game's log4j2, so off-game the log4j-api jar has to
+ * be on the runtime classpath. Without log4j-core it falls back to SimpleLogger and prints one
+ * "could not find a logging provider" line on stderr; the HTTP result is unaffected.</p>
  */
 public final class VerifyServer {
 
@@ -65,6 +70,12 @@ public final class VerifyServer {
 		Response manual = request("GET", "/bt/", null);
 		check("GET /bt/: 200", manual.status == 200, detail(manual));
 		check("GET /bt/: manual title", manual.body.contains("MGBaritoneConnector"), detail(manual));
+		check("GET /bt/: targets Minecraft 26.3", manual.body.contains("Minecraft 26.3"), detail(manual));
+		check("GET /bt/: no other Minecraft 26.x",
+				manual.body.lines().filter(line -> line.contains("Minecraft 26."))
+						.allMatch(line -> line.contains("Minecraft 26.3")),
+				detail(manual));
+		check("GET /bt/: Baritone 1.20.0", manual.body.contains("Baritone 1.20.0"), detail(manual));
 		check("GET /bt/: documents POST", manual.body.contains("POST /bt/"), detail(manual));
 
 		Response head = request("HEAD", "/bt/", null);
